@@ -29,7 +29,7 @@ public class SalarieAideADomicileServiceTest {
     void testCalculeLimiteEntrepriseCongesPermis() {
         
         LocalDate moisEnCours = LocalDate.of(2024, 3, 1);
-        double congesPayesAcquisAnneeNMoins1 = 25;  // 25 jours acquis
+        double congesPayesAcquisAnneeNMoins1 = 25; 
         LocalDate moisDebutContrat = LocalDate.of(2020, 6, 1);
         LocalDate premierJourDeConge = LocalDate.of(2024, 7, 15);
         LocalDate dernierJourDeConge = LocalDate.of(2024, 8, 15);
@@ -43,6 +43,25 @@ public class SalarieAideADomicileServiceTest {
         
        
         assertEquals(14, resultat); 
+    }
+    @Test
+    void testCalculeLimiteEntrepriseCongesPermisAvecMoinsDeConges() {
+       
+        LocalDate moisEnCours = LocalDate.of(2024, 3, 1);
+        double congesPayesAcquisAnneeNMoins1 = 15; 
+        LocalDate moisDebutContrat = LocalDate.of(2020, 6, 1);
+        LocalDate premierJourDeConge = LocalDate.of(2024, 7, 1);
+        LocalDate dernierJourDeConge = LocalDate.of(2024, 7, 31);
+
+        
+        when(salarieAideADomicileRepository.partCongesPrisTotauxAnneeNMoins1()).thenReturn(0.3);
+
+      
+        long resultat = salarieAideADomicileService.calculeLimiteEntrepriseCongesPermis(
+            moisEnCours, congesPayesAcquisAnneeNMoins1, moisDebutContrat, premierJourDeConge, dernierJourDeConge);
+
+        
+        assertEquals(7, resultat);
     }
 
 }
