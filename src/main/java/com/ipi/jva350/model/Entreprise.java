@@ -124,20 +124,18 @@ public final class Entreprise {
 
 
     public static LocalDate getPremierJourAnneeDeConges(LocalDate d) {
-        return d == null ? null
-                : d.getMonthValue() > 5 ? LocalDate.of(d.getMonthValue(), 6, 1)
-                : LocalDate.of(d.getYear() - 1, 6, 1);
+        Objects.requireNonNull(d, "La date ne peut pas être nulle.");
+        
+        int anneeDeReference = d.getMonthValue() > 5 ? d.getYear() : d.getYear() - 1;
+        return LocalDate.of(anneeDeReference, 6, 1);
     }
 
+
     public static boolean estJourFerie(LocalDate jour) {
-        int monEntier = (int) Entreprise.joursFeries(jour).stream().filter(d ->
-                d.equals(jour)).count();
-        int test = bissextile(jour.getYear()) ? 1 : 0;
-        if (test != 0 && !(monEntier > 1)) {
-            test--;
-        }
-        return monEntier != test;
+        Objects.requireNonNull(jour, "La date ne peut pas être nulle.");
+        return joursFeries(jour).contains(jour);
     }
+
 
     /**
      * Calcule si une date donnée est dans une plage (intervalle) de date (inclusif)
